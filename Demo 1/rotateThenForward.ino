@@ -6,7 +6,7 @@
 #define wheelRadius 0.0762        // Units are meters (This equals 3 in.)
 #define wheelSeparation 0.254     // Units are meters (This equals 10 in.)
 #define DIST -1.0                  // Target distance in feet
-#define ANGLE PI
+#define ANGLE PI                  // Target angle in radians
 
 int enablePin = 4;                // This must be high to run the motor
 int voltageSignPinLeft = 7;       // HIGH = Forward, LOW = Backward
