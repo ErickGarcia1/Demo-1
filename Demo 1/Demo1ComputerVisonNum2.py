@@ -1,0 +1,113 @@
+#Include imports
+import smbus
+import time
+import adafruit_character_lcd.character_lcd_rgb_i2c as character_lcd
+import busio
+import board
+from picamera.array import PiRGBArray
+from picamera import PiCamera
+import cv2
+from cv2 import aruco
+import numpy
+import math
+import array
+
+# Initialise I2C bus.
+i2c = busio.I2C(board.SCL, board.SDA)
+#set up display for later use
+bus = smbus.SMBus(1)
+
+lcd_columns = 16
+lcd_rows = 2
+
+picture = 0
+# Initialise the LCD class
+lcd = character_lcd.Character_LCD_RGB_I2C(i2c, lcd_columns, lcd_rows)
+#def printLCD():
+#    print(angle)
+#    lcd.message = ("Angle From Camera:\n  %d degrees" % (angle))
+def cv_Demo1():
+    # initialize the camera and grab a reference to the raw camera capture
+    camera = PiCamera()
+    rawCapture = PiRGBArray(camera)
+    camera.iso = 100
+    # Wait for the automatic gain control to settle
+    time.sleep(2)
+    # Now fix the values
+    camera.shutter_speed = camera.exposure_speed
+    camera.exposure_mode = 'off'
+    g = camera.awb_gains
+    camera.awb_mode = 'off'
+    camera.awb_gains = g
+    # allow the camera to warmup
+    time.sleep(0.1)
+    camera.framerate = 32
+    aruco_dictionary = aruco.Dictionary_get(aruco.DICT_6X6_250)
+    parameters = aruco.DetectorParameters_create()
+    timer = 0
+    xwidth = 54*(math.pi/180)
+    ywidth = 41*(math.pi/180)
+    marker_flag = 1
+    # start continuous picture taking
+    for frame in camera.capture_continuous(rawCapture, format="bgr", use_video_port=True):
+         marker_found = False
+          
+         # convert to grayscale
+         image = frame.array
+         cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+         cv2.cvtColor(image, cv2.COLOR_RGB2GRAY)
+         corners, ids, rejectedImgPoints = aruco.detectMarkers(image, aruco_dictionary, parameters=parameters)
+         if type(ids) == numpy.ndarray:
+            print("Marker found")
+            marker_found = True
+            output_array = numpy.ndarray(len(ids))
+            index = 0
+            for i in ids:
+                for j in i:
+                    output_array[index] = j
+                    print("Marker Indexes:", end=" ")
+                    print(j)
+                    #Determine angle of marcker form the center of the camera
+                    xcenter = int((corners[0][0][0][0]+corners[0][0][2][0])/2)
+                    ycenter = int((corners[0][0][0][1]+corners[0][0][2][1])/2)
+                    imageMiddleX = image.shape[1]/2
+                    xdist = (xcenter - image.shape[1]/2)
+                    ydist = (ycenter - image.shape[0]/2)
+
+                    xangle = (xdist/image.shape[1]) * xwidth
+                    yangle = (ydist/image.shape[0]) * ywidth
+                
+                    # Calculate the angle from the z-axis to the center point
+                    # First calculate distance (in pixels to screen) on z-axis
+                    a1 = xdist/math.tan(xangle)
+                    a2 = ydist/math.tan(yangle)
+                    a = (a1 + a2)/2
+                    distance = math.sqrt(pow(xdist,2)+pow(ydist,2))
+                    #Calculate final angle for each Aruco
+                    angle = math.atan2(distance,a)*(180/math.pi)
+                    if(xcenter > imageMiddleX):
+                        angle *= -1
+                        if(angle <-3.8 and angle >-4.3):
+                            angle += 4
+                    else:
+                        angle += 4
+                    if(angle > 0):
+                        angle -= 2
+                    display_angle = str(angle)
+                    print("Angle from camera:",angle,"degrees")
+                    lcd.message = ("Beacon Detected \nAngle: %s" % (display_angle))
+                    marker_flag=1
+                    index+=1
+                    print()
+                    break;
+         rawCapture.truncate(0)
+         if marker_found == False:
+             print("No markers found")
+             if marker_flag == 1:
+                 lcd.clear()
+                 marker_flag = 0
+             lcd.message = ("Beacon Not\nDetected")
+             
+cv_Demo1()
+
+
