@@ -1,0 +1,4 @@
+Kodi Morris - Create the CV angle detection script
+Benjamin Selph - Assist Kodi in creating the angle detection script
+Brennen Ward - Create the robot angular and linear movement script
+Erick Garcia - Assist Brenne in creating the angular and linear movement script
