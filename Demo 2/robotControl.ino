@@ -1,4 +1,5 @@
 #include <Encoder.h>
+#include <Wire.h>
 
 #define PI 3.1415926535897932384626433832795
 #define voltsToPWM 255/5
@@ -87,8 +88,8 @@ int posErrorFlag = 0;
 //Pi Communication Variables
 bool beaconFound = true;
 int circleDurationFlag = 0;
-double cameraAngle;
-double cameraPos;
+double cameraAngle = 0;;
+double cameraPos = 0;
 
 Encoder motorEncoderLeft(2, 6);
 Encoder motorEncoderRight(3, 5);
@@ -217,7 +218,14 @@ void loop() {
     phiDesired = 0.1;
     rhoDesired = 0;
     if(beaconFound) {
-      state = STANDBY;
+      posActual = 0;
+      angleActual = 0;
+      beaconFound = false;
+      posDesired = 0;
+      angleDesired = 0;
+      //cameraAngle = read from camera
+      cameraAngle = -PI/4.0;
+      state = ROTATE_TOWARD_BEACON;
     }
 
 
@@ -305,7 +313,7 @@ void loop() {
   } else if (state == DOCIRCLE) {
       rhoDesired = 0.5;
       phiDesired = 0.5;
-      if (circleDurationFlag < 1260) { // Approximately 4*pi seconds
+      if (circleDurationFlag < 1270) { // Approximately 4*pi seconds
         circleDurationFlag += 1;
       } else {
         circleDurationFlag = 0;
@@ -328,4 +336,31 @@ void loop() {
     // Wait until the sample time has passed
   }
 
+}
+
+void receiveData(int byteCount) {
+
+while (Wire.available()) {
+angleDesired = Wire.read();
+
+  if (angleDesired == 1) {
+    angleDesired = 0;
+    
+  } else if (angleDesired == 2) {
+    angleDesired = PI/2;
+    
+  } else if (angleDesired == 3) {
+    angleDesired = PI;
+    
+  } else if (angleDesired == 4) {
+    angleDesired = (3*PI)/2;
+  }
+ }
+}
+
+int stringIndex = 0;
+void sendData(){  
+Wire.write(myString[stringIndex]);
+stringIndex++;
+if(stringIndex>4) stringIndex = 0;
 }
