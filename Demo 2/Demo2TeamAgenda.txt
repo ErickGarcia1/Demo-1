@@ -1,0 +1,17 @@
+SEED Lab Group 5 Demo 2 Team Agenda
+Brennen:
+Pre spring break-Setup basic motor controller and work on making a circle with variable raduis
+Week 4/5- Ensure the state machine and the controller code work together
+Week 4/12- Speed up the controllers to as fast as we can without losing accuracy
+Erick:
+Pre spring break- modify robot and marker for new demo and help Brennen start a state machine
+Week 4/5- Begin intigrating systems and ensure communications work within state machine
+Week 4/12- Work on any debugging errors that come up as well as help with tuning for speed and accuracy
+Kodi:
+Pre spring break- get the CV code to generate an angle and a distance to be sent to the arduino
+Week 4/5- Begin to integrate systems and ensure the CV is as accurate as it needs to be
+Week 4/12- Assist with debugging and error correction as the speed of the robot increases
+Ben:
+Pre spring break- set up communications for easy integration
+Week 4/5- Integrate systems via i2c communcation
+Week 4/12- Ensure communications are working as intended and help with any other debugging needed by the team
