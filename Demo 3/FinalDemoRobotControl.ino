@@ -215,22 +215,14 @@ void loop() {
     
   } else if (state == INIT) {
     // Reset EVERYTHING
-//    rhoDesired = 0;/
     cameraAngle = 0;
     cameraPos = 0;
-//    angleActual = 0;
-//    posActual = 0;
-//    angleDesired = 0;
-//    posDesired = 0;
-    //turnCounter++;
     //Main state that switches between states
     state = SEARCHING;
     
   } else if (state == SEND) {
     
   }  else if (state == SEARCHING) {
-//    phiDesired = -0.175 * turnDir;
-//    rhoDesired = 0;
     if(beaconFound) {
       // When we find the beacon, reset angle/pos and move to the next state
       phiDesired = 0;
@@ -242,7 +234,7 @@ void loop() {
       angleDesired = 0;
       prevState = state;
       state = ROTATE_TOWARD_BEACON;
-      /*if(turnCounter != 0) */turnDir = -1;
+      turnDir = -1;
     }
 
 
@@ -267,7 +259,7 @@ void loop() {
     } else {
       angleErrorFlag = 0;
     }
-    if (angleErrorFlag >= 200) { // 350 // 250
+    if (angleErrorFlag >= 200) {
       posActual = 0;
       angleActual = 0;
       //cameraPos = read from camera
@@ -298,7 +290,7 @@ void loop() {
     } else {
       posErrorFlag = 0;
     }
-    if (posErrorFlag >= 250) { // 350
+    if (posErrorFlag >= 250) { 
       angleActual = 0;
       posActual = 0;
       angleDesired = 0;
@@ -341,12 +333,12 @@ void loop() {
       voltageMaximum = 3;
 
       rhoDesired = 0.4;
-      phiDesired = 0.3;
+      phiDesired = 0.325;
       
       if(turnCounter == 7) {
         rhoDesired = 1.2;
         phiDesired = 1.2;
-      if (circleDurationFlag < 230) { //225 //170 // 180
+      if (circleDurationFlag < 230) {
           circleDurationFlag += 1;
         } else {
           circleDurationFlag = 0;
@@ -400,16 +392,10 @@ state = RECEIVE;
 void changeState() {
   if (state == SEARCHING || prevState == DOCIRCLE) 
   {
-//    phiDesired = 0;
-//    rhoDesired = 0;
-//    myString.toCharArray(buff,10);/
-//    if(prevState == SEARCHING) 
     beaconFound = true;
     cameraAngle = ((double(myString.toInt()) / 100.0) - 60.0) * (PI/180);
-    //if (prevState == TURNRIGHT) state = SEND; //state = ROTATE_TOWARD_BEACON;
   } else if (prevState == ROTATE_TOWARD_BEACON) 
   {
-//  myString.toCharArray(buff,10);/
   cameraPos = double(myString.toInt()) / (10000.0);
   state = GOFORWARD;
   }
