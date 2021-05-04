@@ -1,0 +1,33 @@
+SEED Lab-Group 5 Team Agenda
+
+Week 1 (April 15 - April 23):
+Brennen:
+Work on slowing down the circle the robot does after it arrives at the beacon. Work with Kodi to ensure the camera and new circle speed work together
+to get proper angles and distances.
+Erick:
+Set up the state machine to control the robot as it progresses through the course.
+Ben:
+Set up communications and work with Erick to make the communications and state machine work together to accomplish design goals.
+Kodi:
+Make the CV code continuously  detect markers and ensure that correct marker(the closest marker) and data is ready to send to the arduino.
+Work with Brennen to ensure the CV code and new motor control system work together.
+
+Week 2 (April 24 - April 30):
+Brennen:
+Work on integrating all systems together. Be avaible to change motor controls and speed as needed as errors arise throughout testing.
+Erick:
+Work on integrating all systems together. Work on debugging the state machine and improving it as needed.
+Ben:
+Work with Erick to integarte all systems on the robot and deal with communication issues as they present themselves within the state machine.
+Kodi:
+Work on integrating al systems together. Be available to help debug and change the pi code as needed. 
+
+Week 3 (April 31 - May 3):
+Brennen:
+Work on improving Demo 2 as a fall back in case the final demo does not work. Try to have time to help debug and improve final demo.
+Erick:
+Work on finishing the final demo and making it consistent.
+Ben:
+Work on finishing the final demo and making it consistent.
+Kodi:
+Work on improving Demo 2 as a fall back in case the final demo does not work. Try to have time to help debug and improve final demo.
